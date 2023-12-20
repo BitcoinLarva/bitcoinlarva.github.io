@@ -1,0 +1,33 @@
+name: Update Website
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # 每十分钟执行一次
+
+jobs:
+  update-website:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run update_data.py
+        run: python update_data.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add last_updated.txt
+          git commit -m "Update last updated time [skip ci]"
+          git push
