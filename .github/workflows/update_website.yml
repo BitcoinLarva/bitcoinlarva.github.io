@@ -2,7 +2,7 @@ name: Update Website
 
 on:
   schedule:
-    - cron: '*/30 * * * *' 
+    - cron: '*/10 * * * *' 
 
 jobs:
   update-website:
@@ -28,7 +28,7 @@ jobs:
           pip install aiohttp
 
       - name: Run update.py
-        run: python -m asyncio update.py
+        run: python update.py
 
       - name: Commit and push changes
         run: |

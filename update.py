@@ -2,7 +2,6 @@ import aiohttp
 import asyncio
 import json
 import os
-from pathlib import Path
 
 async def fetch(session, hash_value, name):
     api_url = f'https://api2.ordinalsbot.com/search?hash={hash_value}'
@@ -15,17 +14,20 @@ async def fetch(session, hash_value, name):
     return {'name': name, 'hash': hash_value, 'inscriptionid': inscriptionid, 'inscribed': count}
 
 async def update_status(session, status_list):
-    tasks = [fetch(session, item['hash'], item['name']) for item in status_list if item['inscribed'] == 0]
+    tasks = [fetch(session, item['hash'], item['name']) for item in status_list]
     api_responses = await asyncio.gather(*tasks)
 
-    minted_count = 0
+    name_to_inscriptionid = {}
+
     for status_item, api_response in zip(status_list, api_responses):
         if status_item['inscribed'] == 0:
             status_item['inscriptionid'] = api_response['inscriptionid']
             status_item['inscribed'] = api_response['inscribed']
-            minted_count += 1
 
-    return minted_count
+        # Build a mapping of name to inscriptionid
+        name_to_inscriptionid[status_item['name']] = status_item['inscriptionid']
+
+    return name_to_inscriptionid
 
 def initialize_status_file(status_file_path, items_count):
     initial_status = {
@@ -52,17 +54,22 @@ async def main():
     with open(status_file_path, 'r') as status_file:
         status_data = json.load(status_file)
 
-    # Prepare status_list
-    status_list = [{'name': item['name'], 'hash': item['hash'], 'inscriptionid': status_data['data'][idx], 'inscribed': 0 if status_data['data'][idx] is None else 1} for idx, item in enumerate(items_data)]
+    # Reset mintedNumber to 0
+    minted_count = 0
+
+    # Prepare status_list with name and hash
+    status_list = [{'name': item['name'], 'hash': item['hash'], 'inscriptionid': None, 'inscribed': 0} for item in items_data]
 
     print("Starting hash check. This may take a few minutes...")
     async with aiohttp.ClientSession() as session:
-        minted_count = await update_status(session, status_list)
+        name_to_inscriptionid = await update_status(session, status_list)
+
+    # Calculate minted_count after async tasks are completed
+    minted_count = sum(1 for item in status_list if item['inscribed'] != 0)
 
     # Update status.json
-    #status_data['mintedNumber'] += minted_count
-    status_data['mintedNumber'] = sum(1 for item in status_list if item['inscribed'] != 0)
-    status_data['data'] = [item['inscriptionid'] for item in status_list]
+    status_data['mintedNumber'] = minted_count
+    status_data['data'] = [name_to_inscriptionid[item['name']] for item in status_list]
 
     with open(status_file_path, 'w') as status_file:
         json.dump(status_data, status_file, indent=2)
