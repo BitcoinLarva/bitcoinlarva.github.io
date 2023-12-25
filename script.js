@@ -240,7 +240,7 @@ function updatePageWithData() {
         .then(data => {
             document.getElementById('pageTitle').innerText = `${data.name} - OMINT Collection`;
             document.getElementById('collectionInfo').innerText = `${data.supply} ${data.name}, FIRST IS FIRST!`;
-            document.getElementById('mintInfo').innerText = `${mintedNumber}+ Minted!`;
+            document.getElementById('mintInfo').innerText = `All Minted!`;
             document.getElementById('twitterLink').href = data.twitter_link;
         })
         .catch(error => console.error('Error fetching meta.json:', error));
