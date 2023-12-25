@@ -53,9 +53,9 @@ img.na {
 
 .cardTaken {
   box-shadow: -3px 0 0 0 rgba(255, 255, 255),
-    3px 0 0 0 rgb(255, 255, 255, 0.3),
-    0 -3px 0 0 rgb(255, 255, 255, 0.3),
-    0 3px 0 0 rgb(255, 255, 255, 0.3);
+    3px 0 0 0 rgb(255, 255, 255),
+    0 -3px 0 0 rgb(255, 255, 255),
+    0 3px 0 0 rgb(255, 255, 255);
   max-width: 90px;
   background-color: #000000;
 }
