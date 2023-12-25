@@ -22,7 +22,7 @@
 }
 
 img.na {
-  opacity: 0.5;
+  opacity: 1;
   box-shadow: 0 3px 0 0 rgb(255, 255, 255);
 }
 
@@ -52,10 +52,10 @@ img.na {
 }
 
 .cardTaken {
-  box-shadow: -3px 0 0 0 rgba(255, 255, 255),
-    3px 0 0 0 rgb(255, 255, 255),
-    0 -3px 0 0 rgb(255, 255, 255),
-    0 3px 0 0 rgb(255, 255, 255);
+  box-shadow: -3px 0 0 0 rgba(255, 255, 255, 0.3),
+    3px 0 0 0 rgb(255, 255, 255, 0.3),
+    0 -3px 0 0 rgb(255, 255, 255, 0.3),
+    0 3px 0 0 rgb(255, 255, 255, 0.3);
   max-width: 90px;
   background-color: #000000;
 }
