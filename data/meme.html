@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Larva Meme Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            /* Light gray background */
+        }
+
+        .header {
+            background-color: #f7931a;
+            /* Bitcoin Orange */
+            color: #fff;
+            /* White text color */
+            padding: 10px;
+            text-align: center;
+        }
+
+        .gallery-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            /* Lighter Bitcoin Orange */
+        }
+
+        .gallery-item {
+            width: calc(10% - 20px);
+            /* 10% width with 20px margin */
+            margin: 10px;
+            box-sizing: border-box;
+            /* Fix for the border issue */
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: none;
+            /* Remove image border */
+            border-radius: 5px;
+            transition: transform 0.2s;
+            /* Add a smooth transition effect */
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.1);
+            /* Zoom in on hover */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Semi-transparent black background */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .download-link {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            text-decoration: none;
+            color: #fff;
+            /* White text color */
+            background-color: #f7931a;
+            /* Bitcoin Orange */
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Bitcoin Larva Meme Materials</h1>
+    </div>
+
+    <div class="gallery-container" id="gallery-container"></div>
+
+    <div class="modal" id="modal">
+        <img id="modal-image" alt="Enlarged Image">
+    </div>
+
+    <a href="#" class="download-link" id="download-link" download>
+        ⬇ Download
+    </a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var galleryContainer = document.getElementById("gallery-container");
+            var modal = document.getElementById("modal");
+            var modalImage = document.getElementById("modal-image");
+            var downloadLink = document.getElementById("download-link");
+
+            for (var i = 1; i <= 500; i++) {
+                var imageName = "memeimages/" + i + ".png";
+                if (doesImageExist(imageName)) {
+                    var galleryItem = document.createElement("div");
+                    galleryItem.className = "gallery-item";
+
+                    var img = document.createElement("img");
+                    img.src = imageName;
+                    img.alt = "Meme " + i;
+
+                    img.addEventListener("click", function () {
+                        openModal(this.src);
+                    });
+
+                    galleryItem.appendChild(img);
+                    galleryContainer.appendChild(galleryItem);
+                }
+            }
+
+            function doesImageExist(imageUrl) {
+                var http = new XMLHttpRequest();
+                http.open('HEAD', imageUrl, false);
+                http.send();
+                return http.status !== 404;
+            }
+
+            function openModal(imageUrl) {
+                modalImage.src = imageUrl;
+                modal.style.display = "flex";
+
+                // Enable download link with current image URL
+                downloadLink.href = imageUrl;
+            }
+
+            modal.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+
+            // Close modal on Esc key press
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    modal.style.display = "none";
+                }
+            });
+
+            // Trigger download on click
+            downloadLink.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+        });
+    </script>
+
+</body>
+
+</html>
